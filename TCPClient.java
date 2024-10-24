@@ -1,16 +1,28 @@
    import java.io.*;
    import java.net.*;
-
+    import java.util.Random;
     public class TCPClient {
        public static void main(String[] args) throws IOException {
-      	
-			// Variables for setting up connection and communication
+           //Generate matrix with random numbers
+           Random rand = new Random();
+           int N = 2;
+           int[][] matrixOne = new int[N][N];
+           int[][] matrixTwo = new int[N][N];
+
+           for(int i=0; i<N; i++){
+               for(int j=0; j<N; j++){
+                   matrixOne[i][j] = rand.nextInt();
+                   matrixTwo[i][j] = rand.nextInt();
+               }
+           }
+
+           // Variables for setting up connection and communication
          Socket Socket = null; // socket to connect with ServerRouter
          PrintWriter out = null; // for writing to ServerRouter
          BufferedReader in = null; // for reading form ServerRouter
 			InetAddress addr = InetAddress.getLocalHost();
 			String host = addr.getHostAddress(); // Client machine's IP
-      	String routerName = "j263-08.cse1.spsu.edu"; // ServerRouter host name
+      	String routerName = "localhost"; // ServerRouter host name
 			int SockNum = 5555; // port number
 			
 			// Tries to connect to the ServerRouter
