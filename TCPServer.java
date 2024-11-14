@@ -11,11 +11,11 @@
 			InetAddress addr = InetAddress.getLocalHost();
 			String host = addr.getHostAddress(); // Server machine's IP			
 			String routerName = "localhost"; // ServerRouter host name
-			int SockNum = 5555; // port number
+			int sockNum = 5555; // port number
 			
 			// Tries to connect to the ServerRouter
          try {
-            Socket = new Socket(routerName, SockNum);
+             Socket = new Socket(routerName, sockNum);
             out = new PrintWriter(Socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(Socket.getInputStream()));
          } 
@@ -38,15 +38,7 @@
 			fromClient = in.readLine();// initial receive from router (verification of connection)
 			System.out.println("ServerRouter: " + fromClient);
 			         
-			// Communication while loop
-      	while ((fromClient = in.readLine()) != null) {
-            System.out.println("Client said: " + fromClient);
-            if (fromClient.equals("Bye.")) // exit statement
-					break;
-				fromServer = fromClient.toUpperCase(); // converting received message to upper case
-				System.out.println("Server said: " + fromServer);
-            out.println(fromServer); // sending the converted message back to the Client via ServerRouter
-         }
+			
 			
 			// closing connections
          out.close();
