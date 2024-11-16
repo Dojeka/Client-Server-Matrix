@@ -52,8 +52,9 @@ public class TCPServer {
                 int[][] matrixA = SThread.readMatrix(in);
                 int[][] matrixB = SThread.readMatrix(in);
                 System.out.println("Received matrices.");
-
-                int[][] results = SThread.multiply(matrixA,matrixB);
+                MultiplicationThread mm = new MultiplicationThread(matrixA,matrixB);
+                tree.insert(mm);
+                int[][] results = mm.call();
                 System.out.println("Matrix multiplication complete.");
 
                 SThread.sendMatrix(results,out);
@@ -63,6 +64,8 @@ public class TCPServer {
                 System.err.println("Error reading matrices");
                 System.exit(1);
                 break;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
 
