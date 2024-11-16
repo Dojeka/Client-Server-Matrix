@@ -4,7 +4,7 @@
     public class TCPClient {
        public static void main(String[] args) throws IOException {
            //Generate matrix with random numbers
-           int N = 2;
+           int N = 10;
            int[][] matrixOne = generateMatrix(N);
            int[][] matrixTwo = generateMatrix(N);
            int[][] result = new int[N][N];
