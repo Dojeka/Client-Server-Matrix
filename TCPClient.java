@@ -76,28 +76,13 @@
 
 
            System.out.println("First matrix:");
-           for (int i = 0; i < matrixOne.length; i++) {
-               for (int j = 0; j < matrixOne[i].length; j++) {
-                   System.out.print(matrixOne[i][j] + " ");
-               }
-               System.out.println();
-           }
+           printMatrix(matrixOne);
 
            System.out.println("Second matrix:");
-           for (int i = 0; i < matrixTwo.length; i++) {
-               for (int j = 0; j < matrixTwo[i].length; j++) {
-                   System.out.print(matrixTwo[i][j] + " ");
-               }
-               System.out.println();
-           }
+          printMatrix(matrixTwo);
 
            System.out.println("Results:");
-           for (int i = 0; i < result.length; i++) {
-               for (int j = 0; j < result[i].length; j++) {
-                   System.out.print(result[i][j] + " ");
-               }
-               System.out.println();
-           }
+           printMatrix(result);
 
            // closing connections
            out.close();
@@ -113,5 +98,13 @@
                }
            }
            return matrix;
+       }
+       private static void printMatrix(int[][] matrix){
+           for (int i = 0; i < matrix.length; i++) {
+               for (int j = 0; j < matrix[i].length; j++) {
+                   System.out.print(matrix[i][j] + " ");
+               }
+               System.out.println();
+           }
        }
    }
