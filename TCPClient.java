@@ -55,7 +55,9 @@
            fromServer = in.readLine();//initial receive from router (verification of connection)
            System.out.println("ServerRouter: " + fromServer);
            write.println(host); // Client sends the IP of its machine as initial send
-           System.out.println("Sent IP");
+           System.out.println("Sent client(myself) IP.");
+
+           System.out.println("Starting timer.");
            t0 = System.currentTimeMillis();
 
            //Sending Matrices for multiplication

@@ -5,12 +5,12 @@ public class TCPServer {
         //Variables for setting up connection and communication
         ServerSocket serverSocket = null;
         Socket clientSocket = null; // socket to connect with ServerRouter
-        ObjectOutputStream out = null; // for writing to ServerRouter
+        //ObjectOutputStream out = null; // for writing to ServerRouter
         BufferedReader in = null; // for reading form ServerRouter
-        PrintWriter write = null;
+        PrintWriter out = null;
 
-        InetAddress addr = InetAddress.getLocalHost();// Gets the address of the local host
-		String host = addr.getHostAddress(); // Server machine's IP
+//        InetAddress addr = InetAddress.getLocalHost();// Gets the address of the local host
+//		String host = addr.getHostAddress(); // Server machine's IP
 		String routerName = "127.0.0.1"; // ServerRouter host name
 
         int sockNum = 5556; // port number
@@ -27,8 +27,7 @@ public class TCPServer {
 
                 //communication Streams
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                out = new ObjectOutputStream(clientSocket.getOutputStream());
-                write = new PrintWriter(clientSocket.getOutputStream());
+                out = new PrintWriter(clientSocket.getOutputStream(),true);
 
         }
         catch(UnknownHostException e){
@@ -40,14 +39,13 @@ public class TCPServer {
             System.exit(1);
         }
 
-      	// Variables for message passing			
-        String fromServer; // messages sent to ServerRouter
+
+      	// Variables for message passing
         String fromClient; // messages received from ServerRouter
-        String address ="127.0.0.1"; // destination IP (Client)
 			
         //(initial sends/receives)
-//        write.println(address);// initial send (IP of the destination Client)
         fromClient = in.readLine();// initial receive from router (verification of connection)
+        System.out.println("This line runs");
         System.out.println("ServerRouter: " + fromClient);
 
         while(true){
@@ -59,7 +57,7 @@ public class TCPServer {
                 int[][] results = SThread.multiply(matrixA,matrixB);
                 System.out.println("Matrix multiplication complete.");
 
-                out.writeObject(results);
+                //out.writeObject(results);
                 System.out.println("Results sent.");
             }
             catch (IOException e){
@@ -71,7 +69,6 @@ public class TCPServer {
 
         // closing connections
         clientSocket.close();
-        write.close();
         out.close();
         in.close();
     }

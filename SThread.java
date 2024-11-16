@@ -5,10 +5,10 @@ import java.lang.StringBuilder;
 public class SThread extends Thread 
 {
 	private Object [][] RTable; // routing table
-	private PrintWriter out, outTo; // writers (for writing back to the machine and to destination)
+	private PrintWriter out, outTo, outServer; // writers (for writing back to the machine and to destination)
 
 	private ObjectOutputStream to = null;
-   private BufferedReader in; // reader (for reading from the machine connected to)
+   private BufferedReader in, inServer; // reader (for reading from the machine connected to)
 	private String inputLine, outputLine, destination, addr; // communication strings
 	private Socket outSocket; // socket for communicating with a destination
 	private int ind; // indext in the routing table
@@ -51,7 +51,7 @@ public class SThread extends Thread
 			int portNo = Integer.valueOf(in.readLine());
 			System.out.println("Received port number: " + portNo);
 			System.out.println("Checking for " + destination + " on port number: " + portNo);
-			out.println("Connected to the router."); // confirmation of connection
+			out.println("Connected to the server."); // confirmation of connection
 		// waits 10 seconds to let the routing table fill with all machines' information
 		try{
     		Thread.currentThread().sleep(10000);
@@ -71,10 +71,9 @@ public class SThread extends Thread
 					System.out.println("Found destination: " + destination);
 					try{
 						Socket socket = new Socket(String.valueOf(RTable[i][0]),portNo);
-						ObjectOutputStream outServer = new ObjectOutputStream(socket.getOutputStream());
-						BufferedReader inServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-						PrintWriter write = new PrintWriter(socket.getOutputStream());
-						System.out.println("ServerRouter connected to Server: " + socket.getInetAddress().getHostAddress());
+						inServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						outServer = new PrintWriter(socket.getOutputStream(),true);
+						System.out.println("ServerRouter connected to Server: " + socket.getInetAddress().getHostAddress() + " on port " + portNo);
 					}catch (IOException e){
 						System.err.println("Failed to connect with server " + e.getMessage());
 						System.exit(1);
@@ -87,6 +86,11 @@ public class SThread extends Thread
 			System.err.println("Destination not found for routing.");
 			out.println("Error: Destination not found.");
 		}
+		String clientIP = in.readLine();
+		System.out.println(clientIP);
+		outServer.println("Connected with " + clientIP + " on port: " + portNo);
+		outServer.flush();
+		System.out.println("Sent Confirmation to Server.");
 
 //		int[][] matrixA = readMatrix(in);
 //		int[][] matrixB = readMatrix(in);
