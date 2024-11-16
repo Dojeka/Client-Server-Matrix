@@ -2,6 +2,8 @@
    import java.net.*;
 public class TCPServer {
     public static void main(String[] args) throws IOException {
+        //Record Keeping
+        BinaryTree tree = new BinaryTree();
         //Variables for setting up connection and communication
         ServerSocket serverSocket = null;
         Socket clientSocket = null; // socket to connect with ServerRouter
