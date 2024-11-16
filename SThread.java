@@ -38,12 +38,6 @@ public class SThread extends Thread
 	{
 		try
 		{
-//			Socket socket = new Socket("127.0.0.1",5556);
-//			ObjectOutputStream outServer = new ObjectOutputStream(socket.getOutputStream());
-//			BufferedReader inServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//			PrintWriter write = new PrintWriter(socket.getOutputStream());
-//			System.out.println("ServerRouter connected to Server: " + socket.getInetAddress().getHostAddress());
-
 			// Initial sends/receives
 			destination = in.readLine(); // initial read (the destination for writing)
 			System.out.println("Received destination: "+ destination);
@@ -87,7 +81,6 @@ public class SThread extends Thread
 			out.println("Error: Destination not found.");
 		}
 		String clientIP = in.readLine();
-		System.out.println(clientIP);
 		outServer.println("Connected with " + clientIP + " on port: " + portNo);
 		outServer.flush();
 		System.out.println("Sent Confirmation to Server.");
