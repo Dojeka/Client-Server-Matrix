@@ -25,10 +25,10 @@
 			{
 			try {
 				clientSocket = serverSocket.accept();
+                System.out.println("ServerRouter connected with Client: " + clientSocket.getInetAddress().getHostAddress());
 				SThread t = new SThread(RoutingTable, clientSocket, ind); // creates a thread with a random port
 				t.start(); // starts the thread
 				ind++; // increments the index
-            System.out.println("ServerRouter connected with Client: " + clientSocket.getInetAddress().getHostAddress());
          }
              catch (IOException e) {
                System.err.println("Client/Server failed to connect.");

@@ -16,9 +16,13 @@ public class SThread extends Thread
 	// Constructor
 	SThread(Object [][] Table, Socket toClient, int index) throws IOException
 	{
+		try {
 			out = new PrintWriter(toClient.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(toClient.getInputStream()));
-			to  = new ObjectOutputStream(toClient.getOutputStream());
+		}catch (IOException e){
+			System.err.println("Failed to connect with client.");
+			System.exit(1);
+		}
 			RTable = Table;
 			addr = toClient.getInetAddress().getHostAddress();
 			synchronized (RTable) {
@@ -34,17 +38,20 @@ public class SThread extends Thread
 	{
 		try
 		{
-			Socket socket = new Socket("127.0.0.1",5556);
-			ObjectOutputStream outServer = new ObjectOutputStream(socket.getOutputStream());
-			BufferedReader inServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			PrintWriter write = new PrintWriter(socket.getOutputStream());
-			System.out.println("ServerRouter connected to Server: " + socket.getInetAddress().getHostAddress());
+//			Socket socket = new Socket("127.0.0.1",5556);
+//			ObjectOutputStream outServer = new ObjectOutputStream(socket.getOutputStream());
+//			BufferedReader inServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//			PrintWriter write = new PrintWriter(socket.getOutputStream());
+//			System.out.println("ServerRouter connected to Server: " + socket.getInetAddress().getHostAddress());
 
 			// Initial sends/receives
-		destination = in.readLine(); // initial read (the destination for writing)
-		System.out.println("Forwarding to " + destination);
-		out.println("Connected to the router."); // confirmation of connection
-		
+			destination = in.readLine(); // initial read (the destination for writing)
+			System.out.println("Received destination: "+ destination);
+
+			int portNo = Integer.valueOf(in.readLine());
+			System.out.println("Received port number: " + portNo);
+			System.out.println("Checking for " + destination + " on port number: " + portNo);
+			out.println("Connected to the router."); // confirmation of connection
 		// waits 10 seconds to let the routing table fill with all machines' information
 		try{
     		Thread.currentThread().sleep(10000);
@@ -62,6 +69,16 @@ public class SThread extends Thread
 					outSocket = (Socket) RTable[i][1]; // gets the socket for communication from the table
 					outTo = new PrintWriter(outSocket.getOutputStream(),true); // assigns a writer
 					System.out.println("Found destination: " + destination);
+					try{
+						Socket socket = new Socket(String.valueOf(RTable[i][0]),portNo);
+						ObjectOutputStream outServer = new ObjectOutputStream(socket.getOutputStream());
+						BufferedReader inServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						PrintWriter write = new PrintWriter(socket.getOutputStream());
+						System.out.println("ServerRouter connected to Server: " + socket.getInetAddress().getHostAddress());
+					}catch (IOException e){
+						System.err.println("Failed to connect with server " + e.getMessage());
+						System.exit(1);
+					}
 					break;
 				}
 			}
@@ -71,15 +88,15 @@ public class SThread extends Thread
 			out.println("Error: Destination not found.");
 		}
 
-		int[][] matrixA = readMatrix(in);
-		int[][] matrixB = readMatrix(in);
-		System.out.println("Received matrices for multiplication.");
+//		int[][] matrixA = readMatrix(in);
+//		int[][] matrixB = readMatrix(in);
+//		System.out.println("Received matrices for multiplication.");
 
-		//Perform matrix multiplication
-		int[][] results = multiply(matrixA, matrixB);
-		System.out.println("Matrix Multiplication done.");
-
-		to.writeObject(results);
+//		//Perform matrix multiplication
+//		int[][] results = multiply(matrixA, matrixB);
+//		System.out.println("Matrix Multiplication done.");
+//
+//		to.writeObject(results);
 
 
 		 }// end try

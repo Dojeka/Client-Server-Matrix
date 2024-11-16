@@ -13,24 +13,24 @@
            // Variables for setting up connection and communication
            Socket socket = null; //socket to connect with ServerRouter
            PrintWriter write = null;
-           ObjectOutputStream out = null; // for writing to ServerRouter
+//           ObjectOutputStream out = null; // for writing to ServerRouter
            BufferedReader in = null; // for reading form ServerRouter
 
            //Fetching addresses and IP
            InetAddress addr = InetAddress.getLocalHost();
            String host = addr.getHostAddress(); // Client machine's IP
-           String routerName = "127.0.0.1"; // ServerRouter host name
+           String routerName = "127.0.0.1";// ServerRouter host name
            int SockNum = 5555; // port number
 
            // Tries to connect to the ServerRouter
 
            try  {
                socket = new Socket(routerName, SockNum);
-               out = new ObjectOutputStream(socket.getOutputStream());
+               //out = new ObjectOutputStream(socket.getOutputStream());
                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-               write = new PrintWriter(socket.getOutputStream());
+               write = new PrintWriter(socket.getOutputStream(), true);
+               System.out.println("Connected to the ServerRouter.");
 
-               System.out.println("Connected to the Server.");
            } catch (UnknownHostException e) {
                System.err.println("Don't know about router: " + routerName);
                System.exit(1);
@@ -40,19 +40,28 @@
            }
 
            String destinationIP = "127.0.0.1"; // destination IP (Server)
+           int destinationPort = 5556;
            long t0, t1, t;
            String fromServer;
+
            // (initial sends/receives)
            write.println(destinationIP);// initial send (IP of the destination Server)
+           write.flush();
+           System.out.println("Sent host address.");
+
+           write.println(destinationPort);
+           System.out.println("Sent Destination port number.");
+
            fromServer = in.readLine();//initial receive from router (verification of connection)
            System.out.println("ServerRouter: " + fromServer);
-//               write.println(host); // Client sends the IP of its machine as initial send
+           write.println(host); // Client sends the IP of its machine as initial send
+           System.out.println("Sent IP");
            t0 = System.currentTimeMillis();
 
            //Sending Matrices for multiplication
-           out.writeObject(matrixOne);
-           out.writeObject(matrixTwo);
-           out.flush();
+//           out.writeObject(matrixOne);
+//           out.writeObject(matrixTwo);
+//           out.flush();
            System.out.println("Sent out Matrices");
 
            // Take in the result
@@ -89,7 +98,7 @@
            }
 
            // closing connections
-           out.close();
+          // out.close();
            in.close();
            write.close();
        }
