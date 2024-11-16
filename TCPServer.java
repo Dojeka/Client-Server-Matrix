@@ -5,12 +5,9 @@ public class TCPServer {
         //Variables for setting up connection and communication
         ServerSocket serverSocket = null;
         Socket clientSocket = null; // socket to connect with ServerRouter
-        //ObjectOutputStream out = null; // for writing to ServerRouter
         BufferedReader in = null; // for reading form ServerRouter
         PrintWriter out = null;
 
-//        InetAddress addr = InetAddress.getLocalHost();// Gets the address of the local host
-//		String host = addr.getHostAddress(); // Server machine's IP
 		String routerName = "127.0.0.1"; // ServerRouter host name
 
         int sockNum = 5556; // port number
@@ -57,7 +54,7 @@ public class TCPServer {
                 int[][] results = SThread.multiply(matrixA,matrixB);
                 System.out.println("Matrix multiplication complete.");
 
-                //out.writeObject(results);
+                SThread.sendMatrix(results,out);
                 System.out.println("Results sent.");
             }
             catch (IOException e){

@@ -92,16 +92,19 @@ public class SThread extends Thread
 		outServer.flush();
 		System.out.println("Sent Confirmation to Server.");
 
-//		int[][] matrixA = readMatrix(in);
-//		int[][] matrixB = readMatrix(in);
-//		System.out.println("Received matrices for multiplication.");
+		int[][] matrixA = readMatrix(in);
+		int[][] matrixB = readMatrix(in);
+		System.out.println("Received matrices from Client.");
 
-//		//Perform matrix multiplication
-//		int[][] results = multiply(matrixA, matrixB);
-//		System.out.println("Matrix Multiplication done.");
-//
-//		to.writeObject(results);
+		sendMatrix(matrixA, outServer);
+		sendMatrix(matrixB, outServer);
+		System.out.println("Sent matrices to Server");
 
+		int[][] result = readMatrix(inServer);
+		System.out.println("Received matrix product from Server.");
+
+		sendMatrix(result,out);
+		System.out.println("Sent matrix product to Client.");
 
 		 }// end try
 			catch (IOException e) {

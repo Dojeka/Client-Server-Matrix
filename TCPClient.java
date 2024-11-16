@@ -12,8 +12,7 @@
 
            // Variables for setting up connection and communication
            Socket socket = null; //socket to connect with ServerRouter
-           PrintWriter write = null;
-//           ObjectOutputStream out = null; // for writing to ServerRouter
+           PrintWriter out = null;
            BufferedReader in = null; // for reading form ServerRouter
 
            //Fetching addresses and IP
@@ -28,7 +27,7 @@
                socket = new Socket(routerName, SockNum);
                //out = new ObjectOutputStream(socket.getOutputStream());
                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-               write = new PrintWriter(socket.getOutputStream(), true);
+               out = new PrintWriter(socket.getOutputStream(), true);
                System.out.println("Connected to the ServerRouter.");
 
            } catch (UnknownHostException e) {
@@ -45,31 +44,32 @@
            String fromServer;
 
            // (initial sends/receives)
-           write.println(destinationIP);// initial send (IP of the destination Server)
-           write.flush();
+           out.println(destinationIP);// initial send (IP of the destination Server)
+           out.flush();
            System.out.println("Sent host address.");
 
-           write.println(destinationPort);
+           out.println(destinationPort);
            System.out.println("Sent Destination port number.");
 
            fromServer = in.readLine();//initial receive from router (verification of connection)
            System.out.println("ServerRouter: " + fromServer);
-           write.println(host); // Client sends the IP of its machine as initial send
+           out.println(host); // Client sends the IP of its machine as initial send
            System.out.println("Sent client(myself) IP.");
 
            System.out.println("Starting timer.");
            t0 = System.currentTimeMillis();
 
            //Sending Matrices for multiplication
-//           out.writeObject(matrixOne);
-//           out.writeObject(matrixTwo);
-//           out.flush();
+           SThread.sendMatrix(matrixOne, out);
+           SThread.sendMatrix(matrixTwo, out);
+           out.flush();
            System.out.println("Sent out Matrices");
 
            // Take in the result
            result = SThread.readMatrix(in);
            System.out.println("Received results.");
 
+           System.out.println("Ending timer.");
            t1 = System.currentTimeMillis();
            t = t1 - t0;
            System.out.println("Cycle time: " + t);
@@ -78,7 +78,7 @@
            System.out.println("First matrix:");
            for (int i = 0; i < matrixOne.length; i++) {
                for (int j = 0; j < matrixOne[i].length; j++) {
-                   System.out.println(matrixOne[i][j] + " ");
+                   System.out.print(matrixOne[i][j] + " ");
                }
                System.out.println();
            }
@@ -86,7 +86,7 @@
            System.out.println("Second matrix:");
            for (int i = 0; i < matrixTwo.length; i++) {
                for (int j = 0; j < matrixTwo[i].length; j++) {
-                   System.out.println(matrixTwo[i][j] + " ");
+                   System.out.print(matrixTwo[i][j] + " ");
                }
                System.out.println();
            }
@@ -94,15 +94,15 @@
            System.out.println("Results:");
            for (int i = 0; i < result.length; i++) {
                for (int j = 0; j < result[i].length; j++) {
-                   System.out.println(result[i][j] + " ");
+                   System.out.print(result[i][j] + " ");
                }
                System.out.println();
            }
 
            // closing connections
-          // out.close();
+           out.close();
            in.close();
-           write.close();
+           socket.close();
        }
        private static int[][] generateMatrix(int N){
            Random rand = new Random();
