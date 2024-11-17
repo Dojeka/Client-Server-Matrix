@@ -43,13 +43,13 @@ public class MultiplicationThread implements Callable<int[][]> {
         splitMatrix(B, B22, newSize, newSize);
 
         // Compute the seven products using recursion
-        int[][] M1 = multiply(addMatrices(A11, A22), addMatrices(B11, B22));
-        int[][] M2 = multiply(addMatrices(A21, A22), B11);
-        int[][] M3 = multiply(A11, subtractMatrices(B12, B22));
-        int[][] M4 = multiply(A22, subtractMatrices(B21, B11));
-        int[][] M5 = multiply(addMatrices(A11, A12), B22);
-        int[][] M6 = multiply(subtractMatrices(A21, A11), addMatrices(B11, B12));
-        int[][] M7 = multiply(subtractMatrices(A12, A22), addMatrices(B21, B22));
+        int[][] M1 = SThread.multiply(addMatrices(A11, A22), addMatrices(B11, B22));
+        int[][] M2 = SThread.multiply(addMatrices(A21, A22), B11);
+        int[][] M3 = SThread.multiply(A11, subtractMatrices(B12, B22));
+        int[][] M4 = SThread.multiply(A22, subtractMatrices(B21, B11));
+        int[][] M5 = SThread.multiply(addMatrices(A11, A12), B22);
+        int[][] M6 = SThread.multiply(subtractMatrices(A21, A11), addMatrices(B11, B12));
+        int[][] M7 = SThread.multiply(subtractMatrices(A12, A22), addMatrices(B21, B22));
 
         // Calculate final quadrants of the result matrix
         int[][] C11 = addMatrices(subtractMatrices(addMatrices(M1, M4), M5), M7);
@@ -103,5 +103,4 @@ public class MultiplicationThread implements Callable<int[][]> {
             System.arraycopy(child[i], 0, parent[i + row], col, child.length);
         }
     }
-}
 }
